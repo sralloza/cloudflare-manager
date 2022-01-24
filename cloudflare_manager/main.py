@@ -1,6 +1,8 @@
 from ipaddress import IPv4Address
 from typing import List
 
+from requests.models import HTTPError
+
 from pydantic import parse_obj_as
 from requests import Session
 
@@ -35,8 +37,16 @@ class AutoCloudflare:
 
     def get_zone_id(self):
         response = self.get("/zones")
+        try:
+            response.raise_for_status()
+        except HTTPError:
+            print(response.text)
+            raise
+
         zones = response.json()["result"]
-        assert len(zones) == 1
+        if len(zones) != 1:
+            raise ValueError(f"Found more than 1 zone: {zones}")
+
         return zones[0]["id"]
 
     def get_dns_records(self):
