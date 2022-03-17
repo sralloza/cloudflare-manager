@@ -42,4 +42,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: "sralloza/auto-cloudflare:${{ steps.project_version.outputs.version }}"
+          tags: "sralloza/cloudflare-manager:${{ steps.project_version.outputs.version }}"
